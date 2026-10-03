@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ActionLoop</title>
+<link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <span class="brand-mark">AL</span>
+        <span class="brand-name">ActionLoop</span>
+      </div>
+      <nav>
+        <button class="nav-btn active" data-view="review">Review Queue</button>
+        <button class="nav-btn" data-view="meetings">Meetings</button>
+        <button class="nav-btn" data-view="initiatives">Initiatives</button>
+        <button class="nav-btn" data-view="reports">Weekly Report</button>
+      </nav>
+      <div class="sidebar-foot">AI meeting &amp; initiative tracker</div>
+    </aside>
+
+    <main class="content">
+      <!-- Review Queue -->
+      <section id="view-review" class="view active">
+        <header class="view-header">
+          <h1>Review Queue</h1>
+          <p>Action items the AI extracted, waiting for a human to confirm.</p>
+        </header>
+        <div id="review-list" class="card-list"></div>
+      </section>
+
+      <!-- Meetings -->
+      <section id="view-meetings" class="view">
+        <header class="view-header">
+          <h1>Meetings</h1>
+          <p>Drop in a transcript or an audio file and ActionLoop extracts the action items.</p>
+        </header>
+
+        <form id="transcript-form" class="panel form-grid">
+          <h2>New meeting — paste transcript</h2>
+          <label>Title<input type="text" id="meeting-title" required placeholder="Weekly sync — Oct 3" /></label>
+          <label>Transcript<textarea id="meeting-transcript" rows="6" required placeholder="Sam: I'll send the budget report by Friday..."></textarea></label>
+          <button type="submit">Extract action items</button>
+          <span class="status" id="transcript-status"></span>
+        </form>
+
+        <form id="audio-form" class="panel form-grid">
+          <h2>New meeting — upload audio</h2>
+          <label>Title<input type="text" id="audio-title" required placeholder="Standup recording" /></label>
+          <label>Audio file<input type="file" id="audio-file" accept="audio/*" required /></label>
+          <button type="submit">Transcribe &amp; extract</button>
+          <span class="status" id="audio-status"></span>
+        </form>
+
+        <h2 class="section-title">Recent meetings</h2>
+        <div id="meetings-list" class="card-list"></div>
+      </section>
+
+      <!-- Initiatives -->
+      <section id="view-initiatives" class="view">
+        <header class="view-header">
+          <h1>Initiatives</h1>
+          <p>Track status, completion, and overdue items per initiative.</p>
+        </header>
+
+        <form id="initiative-form" class="panel form-grid form-inline">
+          <label>Name<input type="text" id="initiative-name" required placeholder="Q4 migration" /></label>
+          <label>Description<input type="text" id="initiative-desc" placeholder="optional" /></label>
+          <button type="submit">Create initiative</button>
+          <span class="status" id="initiative-status"></span>
+        </form>
+
+        <div id="initiatives-list" class="card-list"></div>
+      </section>
+
+      <!-- Reports -->
+      <section id="view-reports" class="view">
+        <header class="view-header">
+          <h1>Weekly Report</h1>
+          <p>Auto-generated every Monday at 8am, or run it on demand.</p>
+        </header>
+        <div class="panel">
+          <button id="generate-report">Generate &amp; save</button>
+          <button id="preview-report" class="secondary">Preview</button>
+          <span class="status" id="report-status"></span>
+        </div>
+        <pre id="report-output" class="report-output"></pre>
+      </section>
+    </main>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

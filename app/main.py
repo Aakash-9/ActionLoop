@@ -3,6 +3,8 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 
 from . import models, schemas
@@ -15,6 +17,14 @@ from .transcription import transcribe
 app = FastAPI(title="ActionLoop", description="AI meeting & initiative tracker")
 
 Base.metadata.create_all(bind=engine)
+
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
+app.mount("/static", StaticFiles(directory=FRONTEND_DIR), name="static")
+
+
+@app.get("/")
+def index():
+    return FileResponse(FRONTEND_DIR / "index.html")
 
 
 @app.on_event("startup")
@@ -53,6 +63,11 @@ def upload_meeting_audio(title: str, file: UploadFile = File(...), db: Session =
         tmp_path.unlink(missing_ok=True)
 
     return _create_meeting_with_items(db, title, transcript)
+
+
+@app.get("/meetings", response_model=list[schemas.MeetingOut])
+def list_meetings(db: Session = Depends(get_db)):
+    return db.query(models.Meeting).order_by(models.Meeting.id.desc()).all()
 
 
 @app.get("/meetings/{meeting_id}", response_model=schemas.MeetingOut)

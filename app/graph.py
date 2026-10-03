@@ -32,7 +32,7 @@ def _normalize(state: ExtractionState) -> ExtractionState:
         deadline = item.get("deadline") or None
         if deadline:
             try:
-                date.fromisoformat(deadline)
+                deadline = date.fromisoformat(deadline)
             except ValueError:
                 deadline = None
 
