@@ -9,8 +9,10 @@ review step and a weekly initiative status report.
 - LangGraph — extract → normalize pipeline over the transcript
 - Ollama (local LLM) — action item extraction
 - faster-whisper — local audio transcription
-- PostgreSQL + SQLAlchemy — storage
+- SQLAlchemy — storage, defaults to local SQLite (no Postgres-specific features used, so
+  pointing `DATABASE_URL` at a real Postgres instance works as a drop-in swap)
 - APScheduler — weekly report cron job
+- Plain HTML/CSS/JS frontend — no build step, served by FastAPI at `/`
 
 ## Setup
 
@@ -20,8 +22,8 @@ cp .env.example .env   # edit DATABASE_URL if needed; OLLAMA_MODEL defaults to l
 uvicorn app.main:app --reload
 ```
 
-Postgres must be running and reachable at `DATABASE_URL`; tables are created automatically on
-startup.
+Open http://localhost:8000 for the dashboard. Tables are created automatically on startup;
+`actionloop.db` (SQLite) appears next to the project root.
 
 ## Flow
 
